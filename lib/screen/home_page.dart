@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePageSeleted> {
             BottomNavigationBarItem(
                 label: 'Devices',
                 icon: Icon(
-                  Icons.group,
+                  Icons.devices,
                 )
             ),
             BottomNavigationBarItem(

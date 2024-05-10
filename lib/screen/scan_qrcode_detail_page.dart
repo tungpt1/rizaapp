@@ -252,7 +252,8 @@ class _CustomerDetailPageState extends State<ScanQRCodeDetailPage> with WidgetsB
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: ()  async {
-                      Navigator.pop(context);
+                      Fluttertoast.showToast(msg: "Functionality is under construction",
+                          toastLength: Toast.LENGTH_SHORT);
                     },
                     label: const Text('Manual'),
                     icon : const Icon(

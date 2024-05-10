@@ -91,7 +91,7 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                     child: Column
                       (
                       children: [
-                        const Text("Total Device",
+                        const Text("Total Devices",
                           style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold
@@ -115,7 +115,7 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                     child: Column
                       (
                       children: [
-                        const Text("Total Upload Today",
+                        const Text("Total Uploads Today",
                           style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold
@@ -134,7 +134,7 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                   ),
                 ),
               ],),
-            SizedBox(height: 8,),
+            SizedBox(height: 16,),
             Row(
               children: [
                 Expanded(
@@ -145,6 +145,9 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                     },
                     icon: const Icon(Icons.devices),
                     label: const Text("Devices"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16), // Adjust the vertical padding as needed
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8,),
@@ -156,11 +159,14 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                     },
                     icon: const Icon(Icons.settings),
                     label: const Text("Settings"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16), // Adjust the vertical padding as needed
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 8,),
+            SizedBox(height: 16,),
             Row(
               children: [
                 Expanded(
@@ -171,17 +177,26 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                     },
                     icon: const Icon(Icons.upload_file),
                     label: const Text("Scan QR"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16), // Adjust the vertical padding as needed
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8,),
+                const SizedBox(width: 16,),
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: (){
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const HomePageSeleted(2)));
+                      Fluttertoast.showToast(msg: "Functionality is under construction",
+                          toastLength: Toast.LENGTH_SHORT);
+                      return;
+                      /*Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const HomePageSeleted(2)));*/
                     },
                     icon: const Icon(Icons.handyman),
                     label: const Text("Manual"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16), // Adjust the vertical padding as needed
+                    ),
                   ),
                 ),
               ],

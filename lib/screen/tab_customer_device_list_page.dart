@@ -139,7 +139,7 @@ class _CustomerV2PageState extends State<CustomerV2Page> with WidgetsBindingObse
                 color: Colors.white,
                 height: 1.0,
               )),
-          title: const Text("Device List"),
+          title: const Text("List of Devices"),
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
           /*leading: const BackButton(
@@ -471,14 +471,8 @@ class _CustomerV2PageState extends State<CustomerV2Page> with WidgetsBindingObse
                                  width: 200,
                                  child: ElevatedButton.icon(
                                    onPressed: (){
-                                     /*
-                                     Navigator.push(
-                                       context,
-                                       MaterialPageRoute(
-                                           builder: (context) => CustomerDetailExtendPage(futureCustomers[index])
-                                       ),
-                                     );
-                                      */
+                                     Fluttertoast.showToast(msg: "Functionality is under construction",
+                                         toastLength: Toast.LENGTH_SHORT);
                                    },
                                    icon: const Icon(Icons.handyman),
                                    label: const Text("Manual"),

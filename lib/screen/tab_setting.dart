@@ -148,6 +148,14 @@ class _TabSettingPageState extends State<TabSettingPage> with WidgetsBindingObse
                                     TextSpan(
                                         text: "1.0.0",
                                         style: TextStyle(
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0
+                                        )
+                                    ),
+                                    TextSpan(
+                                        text: " @Copyright BeezFM",
+                                        style: TextStyle(
                                             color: Colors.blue,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16.0
