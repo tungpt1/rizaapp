@@ -19,7 +19,7 @@ class TabSettingPage extends StatefulWidget {
 
 class _TabSettingPageState extends State<TabSettingPage> with WidgetsBindingObserver {
   final storage = FlutterSecureStorage();
-  LdDragonApiManController ldDragonApiManController = LdDragonApiManController();
+  RizaAppApiManController rizaappApiManController = RizaAppApiManController();
   late CustomerSettingDetails customerSettingDetails = CustomerSettingDetails();
   //thông tin cài đặt telegram
   String deviceSerialNumber = "";
@@ -71,7 +71,7 @@ class _TabSettingPageState extends State<TabSettingPage> with WidgetsBindingObse
 
   void _getValidInfo() async
   {
-    var checkResult = await ldDragonApiManController.userValid();
+    var checkResult = await rizaappApiManController.userValid();
     if(checkResult.code! < 0)
     {
       if(checkResult.code == SYSTEM_NOT_AUTHORIZE) {

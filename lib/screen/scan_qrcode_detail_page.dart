@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:rizaapp/screen/home.dart';
 import 'package:rizaapp/screen/signin.dart';
 import '../config/constant.dart';
 import '../controllers/rizaapp_api_service.dart';
 import '../model/customer.dart';
-import 'home_page.dart';
-class CustomerDeviceDetailPage extends StatefulWidget {
+class ScanQRCodeDetailPage extends StatefulWidget {
   //final IsarService service;
-  final CustomerDeviceDetail customerDetail;
-  const CustomerDeviceDetailPage(this.customerDetail , {Key? key}) : super(key: key);
+  final CustomerDeviceDetail customerDeviceDetail;
+  const ScanQRCodeDetailPage(this.customerDeviceDetail , {Key? key}) : super(key: key);
 
   @override
-  State<CustomerDeviceDetailPage> createState() => _CustomerDeviceDetailPageState();
+  State<ScanQRCodeDetailPage> createState() => _CustomerDetailPageState();
 }
 
-class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> with WidgetsBindingObserver{
+class _CustomerDetailPageState extends State<ScanQRCodeDetailPage> with WidgetsBindingObserver{
   RizaAppApiManController rizaappApiManController = RizaAppApiManController();
 
   @override
@@ -75,7 +74,7 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
                             ),
                           ),
                           TextSpan(
-                              text: widget.customerDetail.deviceName == null ? "" : widget.customerDetail.deviceName,
+                              text: widget.customerDeviceDetail.deviceName == null ? "" : widget.customerDeviceDetail.deviceName,
                               style: const TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
@@ -97,7 +96,7 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
                             ),
                           ),
                           TextSpan(
-                              text: widget.customerDetail.deviceCategoryName == null ? "" : widget.customerDetail.deviceCategoryName,
+                              text: widget.customerDeviceDetail.deviceCategoryName == null ? "" : widget.customerDeviceDetail.deviceCategoryName,
                               style: const TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
@@ -119,7 +118,7 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
                             ),
                           ),
                           TextSpan(
-                              text: widget.customerDetail.description == null ? "" : widget.customerDetail.description,
+                              text: widget.customerDeviceDetail.description == null ? "" : widget.customerDeviceDetail.description,
                               style: const TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
@@ -141,7 +140,7 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
                             ),
                           ),
                           TextSpan(
-                              text: widget.customerDetail.companyName!,
+                              text: widget.customerDeviceDetail.companyName!,
                               style: const TextStyle(
                                 color: Colors.lightGreen,
                                 fontWeight: FontWeight.bold,
@@ -163,7 +162,7 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
                             ),
                           ),
                           TextSpan(
-                              text: truncateWithEllipsis(20,widget.customerDetail.deviceSerialNum!),
+                              text: truncateWithEllipsis(20,widget.customerDeviceDetail.deviceSerialNum!),
                               style: const TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
@@ -185,7 +184,7 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
                             ),
                           ),
                           TextSpan(
-                              text: formatDateVN(widget.customerDetail.createdOn!),
+                              text: formatDateVN(widget.customerDeviceDetail.createdOn!),
                               style: const TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold,
@@ -196,6 +195,79 @@ class _CustomerDeviceDetailPageState extends State<CustomerDeviceDetailPage> wit
 
                   ),
                   SizedBox(height: 16,),
+                ],
+              ),
+            ),
+            Expanded(
+              flex:  1,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      child: null,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton.icon(
+                    onPressed: ()  async {
+                      XFile? imageFile = await captureImage();
+                      if (imageFile != null) {
+                        var checkResult = await rizaappApiManController.uploadDeviceFile(imageFile,
+                            widget.customerDeviceDetail.deviceSerialNum!,
+                            widget.customerDeviceDetail!.id.toString(),
+                            widget.customerDeviceDetail.deviceGuid!);
+                        if(checkResult.code! < 0)
+                        {
+                          if(checkResult.code == SYSTEM_NOT_AUTHORIZE) {
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SigninPage()), (Route<dynamic> route) => false);
+                            Fluttertoast.showToast(msg: checkResult.message!,
+                                toastLength: Toast.LENGTH_SHORT);
+                            return;
+                          }
+                          else
+                          {
+                            Fluttertoast.showToast(msg: checkResult.message!,
+                                toastLength: Toast.LENGTH_SHORT);
+                            return;
+                          }
+                        }
+                        else
+                        {
+                          if(checkResult.code == SYSTEM_OK) {
+                            Fluttertoast.showToast(msg: "Upload file success",
+                                toastLength: Toast.LENGTH_SHORT);
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage()), (Route<dynamic> route) => false);
+                          }
+                        }
+                      }
+                    },
+                    label: const Text('Upload File'),
+                    icon : const Icon(
+                      Icons.upload_file,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton.icon(
+                    onPressed: ()  async {
+                      Navigator.pop(context);
+                    },
+                    label: const Text('Manual'),
+                    icon : const Icon(
+                      Icons.handyman,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      child: null,
+                    ),
+                  ),
                 ],
               ),
             ),

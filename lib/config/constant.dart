@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 const String APP_NAME = 'LD Dragon';
@@ -42,6 +43,7 @@ const String SERVER_URL = 'https://rizaapp.the4w.app';
 
 const String LOGIN_API = "$SERVER_URL/api/RizaAdminUser/signin";
 const String CUSTOMER_DEVICE_LIST_API = "$SERVER_URL/api/RizaAdminUser/customerdevicelist";
+const String CUSTOMER_DEVICE_BY_GUID_API = "$SERVER_URL/api/RizaAdminUser/searchdevice";
 
 
 const String CUSTOMER_DASHBOARD_INFO_API = "$SERVER_URL/api/RizaAdminUser/adminuserdashboard";
@@ -222,4 +224,15 @@ bool isLastCharacterDigit(String input) {
 
 int countOccurrencesUsingWhere(List<String> values, String element) {
   return values.where((e) => e == element).length;
+}
+
+Future<XFile?> captureImage() async {
+  final picker = ImagePicker();
+  final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+
+  if (photo != null) {
+    return photo;
+  } else {
+    return null;
+  }
 }

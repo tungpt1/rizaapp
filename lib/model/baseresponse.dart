@@ -49,6 +49,38 @@ class CustomerBaseResponse {
   }
 
 }
+
+class CustomerDeviceSearchResponse {
+  int? code;
+  String? message;
+  String? version;
+  CustomerDeviceDetail? details;
+  String? errorMessage;
+
+  CustomerDeviceSearchResponse(
+      {this.code, this.message, this.version, this.details, this.errorMessage});
+
+  CustomerDeviceSearchResponse.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    message = json['message'];
+    version = json['version'];
+    details =
+    json['details'] != null ? new CustomerDeviceDetail.fromJson(json['details']) : null;
+    errorMessage = json['errorMessage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['message'] = this.message;
+    data['version'] = this.version;
+    if (this.details != null) {
+      data['details'] = this.details!.toJson();
+    }
+    data['errorMessage'] = this.errorMessage;
+    return data;
+  }
+}
 //////////////////////////////////////////////////
 class DashboardBaseResponse {
   int? code;

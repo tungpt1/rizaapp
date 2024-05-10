@@ -33,7 +33,7 @@ class _CustomerV2PageState extends State<CustomerV2Page> with WidgetsBindingObse
   final storage = FlutterSecureStorage();
   TextEditingController _txtSearch = TextEditingController();
 
-  LdDragonApiManController ldDragonApiManController = LdDragonApiManController();
+  RizaAppApiManController rizaappApiManController = RizaAppApiManController();
   late List<CustomerDeviceDetail> futureCustomers = [];
   int pageNumber = 1;
   String customerName = "";
@@ -97,18 +97,9 @@ class _CustomerV2PageState extends State<CustomerV2Page> with WidgetsBindingObse
     _scrollController = ScrollController();
     _scrollController.addListener(_loadMore);
   }
-  Future<XFile?> captureImage() async {
-    final picker = ImagePicker();
-    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
-    if (photo != null) {
-      return photo;
-    } else {
-      return null;
-    }
-  }
   Future<List<CustomerDeviceDetail>?> fetchCustomerDetailLoadMore(int pageNew) async {
-    var checkResult =  await ldDragonApiManController.customerDeviceList(pageNew, deviceSerialNumberHash, customerName, status, fromDate, toDate);
+    var checkResult =  await rizaappApiManController.customerDeviceList(pageNew, deviceSerialNumberHash, customerName, status, fromDate, toDate);
     if(checkResult.code! < 0)
     {
       if(checkResult.code == SYSTEM_NOT_AUTHORIZE) {
@@ -426,10 +417,9 @@ class _CustomerV2PageState extends State<CustomerV2Page> with WidgetsBindingObse
                                      Navigator.push(
                                        context,
                                        MaterialPageRoute(
-                                           builder: (context) => CustomerDetailPage(futureCustomers[index])
+                                           builder: (context) => CustomerDeviceDetailPage(futureCustomers[index])
                                        ),
                                      );
-
                                    },
 
                                    icon: const Icon(Icons.calendar_month),
@@ -443,7 +433,7 @@ class _CustomerV2PageState extends State<CustomerV2Page> with WidgetsBindingObse
                                    onPressed: () async{
                                      XFile? imageFile = await captureImage();
                                      if (imageFile != null) {
-                                       var checkResult = await ldDragonApiManController.uploadDeviceFile(imageFile,
+                                       var checkResult = await rizaappApiManController.uploadDeviceFile(imageFile,
                                            futureCustomers[index].deviceSerialNum!,
                                            futureCustomers[index]!.id.toString(),
                                            futureCustomers[index].deviceGuid!);

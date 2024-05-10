@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rizaapp/screen/scan_qrcode_page.dart';
 import 'package:rizaapp/screen/signin.dart';
 
 import '../config/constant.dart';
@@ -22,7 +23,7 @@ class TabHomePage extends StatefulWidget {
 }
 
 class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
-  LdDragonApiManController ldDragonApiManController = LdDragonApiManController();
+  RizaAppApiManController rizaappApiManController = RizaAppApiManController();
   late DashboardDetails dashboardDetail = DashboardDetails()
   ..totalDeviceUploadToday = 0
   ..totalDeviceUploadToday =0;
@@ -37,7 +38,7 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
   }
   void _getDashboardInfo() async
   {
-    var checkResult = await ldDragonApiManController.dashboard();
+    var checkResult = await rizaappApiManController.dashboard();
     if(checkResult.code! < 0)
     {
       if(checkResult.code == SYSTEM_NOT_AUTHORIZE) {
@@ -166,7 +167,7 @@ class _TabHomePageState extends State<TabHomePage> with WidgetsBindingObserver{
                   child: ElevatedButton.icon(
                     onPressed: (){
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePageSeleted(1)));
+                          MaterialPageRoute(builder: (context) => ScanQRCodePage()));
                     },
                     icon: const Icon(Icons.upload_file),
                     label: const Text("Scan QR"),

@@ -16,7 +16,7 @@ class SettingChangePasswordPage extends StatefulWidget {
 }
 
 class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> with WidgetsBindingObserver{
-  LdDragonApiManController ldDragonApiManController = LdDragonApiManController();
+  RizaAppApiManController rizaappApiManController = RizaAppApiManController();
   List<bool> isSelected2 = [false, true ];
 
   final _txtOldPassword = TextEditingController();
@@ -30,7 +30,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
   IconData _iconVisible = Icons.visibility_off;
   void _getValidInfo() async
   {
-    var checkResult = await ldDragonApiManController.userValid();
+    var checkResult = await rizaappApiManController.userValid();
     if(checkResult.code! < 0)
     {
       if(checkResult.code == SYSTEM_NOT_AUTHORIZE) {
@@ -71,7 +71,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
             centerTitle: true,
             //systemOverlayStyle: SystemUiOverlayStyle.dark,
             elevation: 0,
-            title: const Text("Đổi Mật Khẩu"),
+            title: const Text("Change Password"),
           ),
           body:
           Form(
@@ -90,7 +90,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                           if (value == null || value.isEmpty ) {
                             if(enableEnablPasswordClear == true)
                             {
-                              return "Hãy nhập mật khẩu cũ";
+                              return "Old Password";
                             }
                           }
                           return null;
@@ -102,7 +102,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFFCCCCCC)),
                           ),
-                          labelText: 'Mật Khẩu Cũ',
+                          labelText: 'Old Password',
                           suffixIcon: IconButton(
                               icon: Icon(_iconVisible, color: Colors.grey[700], size: 20),
                               onPressed: () {
@@ -122,12 +122,12 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                           if (value == null || value.isEmpty ) {
                             if(enableEnablPasswordClear == true)
                             {
-                              return "Hãy nhập mật khẩu mới";
+                              return "Please in put new password";
                             }
                           }
                           if(value!.isNotEmpty && value!.length < 6)
                           {
-                            return "Mật khẩu phải có độ dài từ 6 ký tự";
+                            return "New password length > 6 characters";
                           }
                           return null;
                         },
@@ -138,7 +138,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFFCCCCCC)),
                           ),
-                          labelText: 'Mật Khẩu Mới',
+                          labelText: 'New Password',
                           suffixIcon: IconButton(
                               icon: Icon(_iconVisible, color: Colors.grey[700], size: 20),
                               onPressed: () {
@@ -158,16 +158,16 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                           if (value == null || value.isEmpty  ) {
                             if(enableEnablPasswordClear == true)
                             {
-                              return "Hãy điền mật khẩu mới nhập lại";
+                              return "Please retype new password";
                             }
                           }
                           if(value!.isNotEmpty && value!.length < 6)
                           {
-                            return "Mật khẩu phải có độ dài từ 6 ký tự";
+                            return "New password length > 6 characters";
                           }
                           if(_txtPassword.text != value!)
                           {
-                            return "Mật khẩu gõ lại không chính xác";
+                            return "Incorect retype password";
                           }
                           return null;
                         },
@@ -179,7 +179,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFFCCCCCC)),
                           ),
-                          labelText: 'Mật Khẩu Mới Nhập Lại',
+                          labelText: 'Retype Password',
                           suffixIcon: IconButton(
                               icon: Icon(_iconVisible, color: Colors.grey[700], size: 20),
                               onPressed: () {
@@ -208,18 +208,18 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 if(_txtPassword.text == _txtOldPassword.text)
                                 {
-                                  Fluttertoast.showToast(msg: "Mật khẩu mới trùng mật khẩu cũ, hãy nhập mật khẩu mới khác",
+                                  Fluttertoast.showToast(msg: "The new password is the same as the old password, please enter a different new password",
                                       toastLength: Toast.LENGTH_SHORT);
                                   return;
                                 }
                                 if(_txtPassword.text != _txtPasswordRetype.text)
                                 {
-                                  Fluttertoast.showToast(msg: "Mật khẩu gõ lại không chính xác",
+                                  Fluttertoast.showToast(msg: "Retyped password is incorrect",
                                       toastLength: Toast.LENGTH_SHORT);
                                   return;
                                 }
                                 //thực hiện gọi cập nhật mật khẩu
-                                var checkResult = await ldDragonApiManController.changePassword(_txtOldPassword.text, _txtPasswordRetype.text);
+                                var checkResult = await rizaappApiManController.changePassword(_txtOldPassword.text, _txtPasswordRetype.text);
                                 if(checkResult.code! < 0)
                                 {
                                   if(checkResult.code == SYSTEM_NOT_AUTHORIZE) {
@@ -238,7 +238,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                                 else
                                   {
                                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SigninPage()), (Route<dynamic> route) => false);
-                                    Fluttertoast.showToast(msg: "Đổi mật khẩu thành công",
+                                    Fluttertoast.showToast(msg: "Password changed successfully",
                                         toastLength: Toast.LENGTH_SHORT);
                                     return;
                                   }
@@ -248,7 +248,7 @@ class _SettingChangePasswordPageState extends State<SettingChangePasswordPage> w
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: SIZE_8),
                               child: Text(
-                                'Lưu Thông Tin',
+                                'Save',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white),

@@ -8,9 +8,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LdDragonApiManController {
+class RizaAppApiManController {
   late Dio _dio;
-  LdDragonApiManController() {
+  RizaAppApiManController() {
     _dio = Dio(BaseOptions(
       baseUrl: CUSTOMER_DEVICE_LIST_API,
       headers: {
@@ -23,7 +23,6 @@ class LdDragonApiManController {
   //list customer device
   Future<CustomerBaseResponse> customerDeviceList(int pageNumber,String? deviceSearchInfo,String? customerName,int? status , DateTime? fromDate, DateTime? toDate) async {
     try {
-      //var deviceSerialNumberHash = await storage.read(key: 'deviceSerialNumberHash');
       var accessToken = await storage.read(key: 'accessToken');
       var userID = await storage.read(key: 'userID');
       var outputFormat = DateFormat('yyyy-MM-dd');
@@ -81,6 +80,46 @@ class LdDragonApiManController {
     }
   }
 
+  Future<CustomerDeviceSearchResponse> customerDeviceByGuid(String qrCode, String deviceGuid) async{
+    try {
+      var accessToken = await storage.read(key: 'accessToken');
+      var userID = await storage.read(key: 'userID');
+
+      Response response = await _dio.post(CUSTOMER_DEVICE_BY_GUID_API,
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          "Authorization": "Bearer $accessToken",
+        }),
+        data: jsonEncode({
+          "userID": userID,
+          "qrCode" : qrCode,
+          "deviceGuid" : deviceGuid
+        }),
+      );
+      //print(response.data);
+      CustomerDeviceSearchResponse customerDeviceSearchResponse = CustomerDeviceSearchResponse.fromJson(response.data);
+      return customerDeviceSearchResponse;
+    } on DioException catch (e) {
+      //returns the error object if there is
+      CustomerDeviceSearchResponse customerDeviceSearchResponse = CustomerDeviceSearchResponse();
+      //print("============= ${e.response!.statusCode}");
+      if ( e.response!.statusCode == 401 || e.response!.statusCode ==  403) {
+        // Handle unauthorized error (e.g., navigate to login screen)
+        customerDeviceSearchResponse.code = SYSTEM_NOT_AUTHORIZE;
+        customerDeviceSearchResponse.errorMessage = CommonUtils.ErrorMessage(SYSTEM_NOT_AUTHORIZE);
+        customerDeviceSearchResponse.message = CommonUtils.ErrorMessage(SYSTEM_NOT_AUTHORIZE);
+
+      } else {
+        // Handle other DioError types
+        customerDeviceSearchResponse.code = SYSTEM_NOT_OK;
+        customerDeviceSearchResponse.errorMessage = CommonUtils.ErrorMessage(SYSTEM_NOT_OK);
+        customerDeviceSearchResponse.message = CommonUtils.ErrorMessage(SYSTEM_NOT_OK);
+
+      }
+
+      return customerDeviceSearchResponse;
+    }
+  }
 
 
   Future<DashboardBaseResponse> dashboard() async{
