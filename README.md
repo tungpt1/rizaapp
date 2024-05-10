@@ -1,6 +1,6 @@
-# lddragonman
+# rizaapp
 
-lddragon manage
+rizaapp manage
 
 ## Getting Started
 
